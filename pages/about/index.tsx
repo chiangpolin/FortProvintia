@@ -1,7 +1,6 @@
 import { Suspense } from 'react';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { Canvas, useLoader } from '@react-three/fiber';
-import { Environment, OrbitControls } from '@react-three/drei';
+import { Canvas } from '@react-three/fiber';
+import { Environment, OrbitControls, useGLTF } from '@react-three/drei';
 import Layout from '@/components/layout';
 
 const Icon = () => {
@@ -24,7 +23,7 @@ const Icon = () => {
 
 const Model = (props: { path: string }) => {
   const { path } = props;
-  const gltf = useLoader(GLTFLoader, path);
+  const gltf = useGLTF(path);
   return <primitive object={gltf.scene} scale={1} position={[0.75, 0, 4]} />;
 };
 
