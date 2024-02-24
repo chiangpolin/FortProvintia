@@ -12,8 +12,8 @@ export default function Home() {
           alt='Fort Provintia'
         />
       </div>
-      <div class='fixed top-1/2 right-1/2 z-20'>
-        <p class='text-white text-4xl font-mono text-center'>
+      <div className='fixed top-1/2 right-1/2 z-20'>
+        <p className='text-white text-4xl font-mono text-center'>
           Fort Provintia 1653
         </p>
       </div>
