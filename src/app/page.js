@@ -8,7 +8,6 @@ import { Environment, OrbitControls, useGLTF } from '@react-three/drei';
 export default function Home() {
   return (
     <div>
-      <Navbar />
       <Hero />
       <VideoSection />
       <RenderSection />
