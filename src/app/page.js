@@ -64,11 +64,11 @@ function Hero() {
           </p>
           <button className='px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-2xl shadow-lg transition'>
             <a
-              href='https://www.youtube.com/watch?v=e_rLiD7bTkY'
+              href='/demo'
               target='_blank'
               rel='noopener noreferrer'
             >
-              Watch Demo
+              Get Started
             </a>
           </button>
         </div>
