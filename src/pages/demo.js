@@ -12,7 +12,7 @@ import './demo.css';
 // ------------------------
 // Loader (optimized)
 // ------------------------
-const Loader = memo(() => {
+const LoaderComponent = () => {
   const { progress } = useProgress();
   return (
     <Html center>
@@ -21,7 +21,9 @@ const Loader = memo(() => {
       </div>
     </Html>
   );
-});
+};
+
+const Loader = memo(LoaderComponent);
 
 // ------------------------
 // Reusable GLTF Model Loader
