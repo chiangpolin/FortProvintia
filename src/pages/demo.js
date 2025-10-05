@@ -138,7 +138,7 @@ export default function ModelsPage() {
             {models.map((path, i) => (
               <Model key={i} path={path} scale={1} position={[0, 0, 0]} />
             ))}
-            <Forest count={30} areaSize={200} />
+            {/* <Forest count={30} areaSize={200} /> */}
           </group>
         </Suspense>
 
