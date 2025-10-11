@@ -114,6 +114,8 @@ function CameraController({
       enableRotate
       maxPolarAngle={Math.PI / 2}
       minPolarAngle={0}
+      maxDistance={150}
+      minDistance={50}
     />
   );
 }
@@ -122,7 +124,7 @@ function CameraController({
 // Main Page
 // ------------------------
 export default function ModelsPage() {
-  const models = ['/models/fort_4.glb', '/models/land_2.glb'];
+  const models = ['/models/fort_6.glb', '/models/land_2.glb'];
   const boats = [
     '/models/boat.glb',
     '/models/boat_2.glb',
@@ -130,18 +132,30 @@ export default function ModelsPage() {
     '/models/boat_4.glb',
   ];
   const cameraViews = [
-    { label: 'View 1', position: new THREE.Vector3(-120, 12, 80) },
-    { label: 'View 2', position: new THREE.Vector3(-20, 6, 80) },
-    { label: 'View 3', position: new THREE.Vector3(100, 8, -160) },
+    {
+      label: 'View 1',
+      position: new THREE.Vector3(-120, 12, 80),
+      snapshot: '/static/snapshot_01.png',
+    },
+    {
+      label: 'View 2',
+      position: new THREE.Vector3(-20, 6, 80),
+      snapshot: '/static/snapshot_01.png',
+    },
+    {
+      label: 'View 3',
+      position: new THREE.Vector3(100, 8, -160),
+      snapshot: '/static/snapshot_02.png',
+    },
   ];
 
-  const [targetPosition, setTargetPosition] = useState(cameraViews[0].position);
+  const [target, setTarget] = useState(cameraViews[0]);
   const [flyIn, setFlyIn] = useState(false);
   const [moving, setMoving] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleButtonClick = (pos) => {
-    setTargetPosition(pos);
+  const handleButtonClick = (view) => {
+    setTarget(view);
     setMoving(true);
   };
 
@@ -186,7 +200,7 @@ export default function ModelsPage() {
 
         {/* Camera Control */}
         <CameraController
-          targetPosition={targetPosition}
+          targetPosition={target.position}
           flyIn={flyIn}
           setFlyIn={setFlyIn}
           moving={moving}
@@ -200,7 +214,7 @@ export default function ModelsPage() {
         {cameraViews.map((view, idx) => (
           <button
             key={idx}
-            onClick={() => handleButtonClick(view.position)}
+            onClick={() => handleButtonClick(view)}
             className='px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-600 transition'
           >
             {view.label}
@@ -222,7 +236,7 @@ export default function ModelsPage() {
             <div className='w-full flex justify-center'>
               <img
                 className='h-[500px] sm:h-[600px] object-cover'
-                src='/static/snapshot_01.png'
+                src={target.snapshot}
               />
             </div>
             {/* Button */}
