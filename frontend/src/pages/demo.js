@@ -78,14 +78,13 @@ function CameraController({
 }) {
   const { camera } = useThree();
   const controlsRef = useRef();
-  const targetRef = useRef(new THREE.Object3D());
   const startPosition = new THREE.Vector3(-120, 12, 80);
 
   useFrame(() => {
     if (flyIn) return;
 
     camera.position.lerp(startPosition, 0.02);
-    camera.lookAt(targetRef.current.position);
+    camera.lookAt(new THREE.Vector3(-30, 0, -20));
 
     if (camera.position.distanceTo(startPosition) < 0.05) {
       setFlyIn(true);
@@ -97,7 +96,7 @@ function CameraController({
 
     if (moving) {
       camera.position.lerp(targetPosition, 0.05);
-      controlsRef.current.target.lerp(new THREE.Vector3(0, 0, 0), 0.05);
+      controlsRef.current.target.lerp(new THREE.Vector3(-30, 0, -20), 0.05);
       controlsRef.current.update();
 
       if (camera.position.distanceTo(targetPosition) < 0.05) {
@@ -109,6 +108,7 @@ function CameraController({
   return (
     <OrbitControls
       ref={controlsRef}
+      target={[-30, 0, -20]}
       enablePan
       enableZoom
       enableRotate
@@ -124,7 +124,8 @@ function CameraController({
 // Main Page
 // ------------------------
 export default function ModelsPage() {
-  const models = ['/models/fort_6.glb', '/models/land_2.glb'];
+  const forts = ['/models/fort_6.glb'];
+  const lands = ['/models/land_2.glb'];
   const boats = [
     '/models/boat.glb',
     '/models/boat_2.glb',
@@ -135,17 +136,17 @@ export default function ModelsPage() {
     {
       label: 'View 1',
       position: new THREE.Vector3(-120, 12, 80),
-      snapshot: '/static/snapshot_01.png',
+      snapshot: '/static/snapshot_01',
     },
     {
       label: 'View 2',
       position: new THREE.Vector3(-20, 6, 80),
-      snapshot: '/static/snapshot_01.png',
+      snapshot: '/static/snapshot_01.jpg',
     },
     {
       label: 'View 3',
-      position: new THREE.Vector3(100, 8, -160),
-      snapshot: '/static/snapshot_02.png',
+      position: new THREE.Vector3(60, 12, -120),
+      snapshot: '/static/snapshot_02.jpg',
     },
   ];
 
@@ -153,6 +154,7 @@ export default function ModelsPage() {
   const [flyIn, setFlyIn] = useState(false);
   const [moving, setMoving] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isBg, setIsBg] = useState(true);
 
   const handleButtonClick = (view) => {
     setTarget(view);
@@ -186,13 +188,26 @@ export default function ModelsPage() {
 
         {/* Models and Forest */}
         <Suspense fallback={<Loader />}>
-          <Environment files='/models/qwantani_4k.hdr' background />
+          {isBg ? (
+            <>
+              <Environment files='/models/qwantani_4k.hdr' background />
+              <group rotation={[0, Math.PI / 2, 0]}>
+                <Sea />
+                {boats.map((path, i) => (
+                  <Boat key={i} path={path} scale={1} position={[40, -2, -20]} />
+                ))}
+                {lands.map((path, i) => (
+                  <Model key={i} path={path} scale={1} position={[0, 0, 0]} />
+                ))}
+              </group>
+            </>
+          ) : (
+            <>
+              <Environment preset='sunset' />
+            </>
+          )}
           <group rotation={[0, Math.PI / 2, 0]}>
-            <Sea boats={boats} />
-            {boats.map((path, i) => (
-              <Boat key={i} path={path} scale={1} position={[0, -2, 0]} />
-            ))}
-            {models.map((path, i) => (
+            {forts.map((path, i) => (
               <Model key={i} path={path} scale={1} position={[0, 0, 0]} />
             ))}
           </group>
@@ -211,21 +226,36 @@ export default function ModelsPage() {
 
       {/* Buttons UI */}
       <div className='absolute bottom-10 w-full flex justify-center gap-4'>
-        {cameraViews.map((view, idx) => (
-          <button
-            key={idx}
-            onClick={() => handleButtonClick(view)}
-            className='px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-600 transition'
-          >
-            {view.label}
-          </button>
-        ))}
+        <div class='inline-flex rounded-lg overflow-hidden' role='group'>
+          {cameraViews.map((view, idx) => (
+            <button
+              key={idx}
+              onClick={() => handleButtonClick(view)}
+              className={`px-4 py-2 text-sm font-medium transition-colors duration-150 ${
+                target.label === view.label
+                  ? 'bg-gray-700 text-white'
+                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white'
+              }`}
+            >
+              {view.label}
+            </button>
+          ))}
+        </div>
         <button
           onClick={() => setIsOpen(true)}
           className='px-6 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition'
         >
           Photo
         </button>
+        <label class='inline-flex items-center cursor-pointer'>
+          <input
+            type='checkbox'
+            value={isBg}
+            onChange={() => setIsBg(!isBg)}
+            class='sr-only peer'
+          />
+          <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
+        </label>
       </div>
 
       {/* === Modal === */}
