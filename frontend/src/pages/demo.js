@@ -8,6 +8,7 @@ import {
   useGLTF,
 } from '@react-three/drei';
 import * as THREE from 'three';
+import Image from 'next/image';
 import '../app/globals.css';
 import './demo.css';
 
@@ -136,7 +137,7 @@ export default function ModelsPage() {
     {
       label: 'View 1',
       position: new THREE.Vector3(-120, 12, 80),
-      snapshot: '/static/snapshot_01',
+      snapshot: '/static/snapshot_01.jpg',
     },
     {
       label: 'View 2',
@@ -194,7 +195,12 @@ export default function ModelsPage() {
               <group rotation={[0, Math.PI / 2, 0]}>
                 <Sea />
                 {boats.map((path, i) => (
-                  <Boat key={i} path={path} scale={1} position={[40, -2, -20]} />
+                  <Boat
+                    key={i}
+                    path={path}
+                    scale={1}
+                    position={[40, -2, -20]}
+                  />
                 ))}
                 {lands.map((path, i) => (
                   <Model key={i} path={path} scale={1} position={[0, 0, 0]} />
@@ -263,10 +269,12 @@ export default function ModelsPage() {
         <div className='fixed inset-0 flex items-center justify-center bg-black/70 z-50'>
           <div className='bg-white rounded-3xl overflow-hidden shadow-2xl w-full h-full max-w-xl max-h-[90vh] mx-4 relative'>
             {/* Image */}
-            <div className='w-full flex justify-center'>
-              <img
-                className='h-[500px] sm:h-[600px] object-cover'
+            <div className='relative h-[600px] w-full flex justify-center'>
+              <Image
+                className='object-cover'
                 src={target.snapshot}
+                fill
+                priority
               />
             </div>
             {/* Button */}
