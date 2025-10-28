@@ -142,15 +142,16 @@ export default function ModelsPage() {
     {
       label: 'View 2',
       position: new THREE.Vector3(-20, 6, 80),
-      snapshot: '/static/snapshot_01.jpg',
+      snapshot: '/static/snapshot_02.jpg',
     },
     {
       label: 'View 3',
       position: new THREE.Vector3(60, 12, -120),
-      snapshot: '/static/snapshot_02.jpg',
+      snapshot: '/static/snapshot_03.jpg',
     },
   ];
 
+  const [loading, setLoading] = useState(false);
   const [target, setTarget] = useState(cameraViews[0]);
   const [flyIn, setFlyIn] = useState(false);
   const [moving, setMoving] = useState(false);
@@ -168,7 +169,12 @@ export default function ModelsPage() {
   };
 
   return (
-    <div style={{ width: '100vw', height: '100vh' }}>
+    <div className='relative' style={{ width: '100vw', height: '100vh' }}>
+      {loading && (
+        <div className='absolute inset-0 flex items-center justify-center bg-black/50 text-white z-10'>
+          Loading...
+        </div>
+      )}
       <Canvas
         shadows
         camera={{ position: [-60, 8, -80], fov: 50 }}
@@ -182,13 +188,14 @@ export default function ModelsPage() {
         }}
         onPointerDown={handleInteraction}
         onWheel={handleInteraction}
+        onCreated={() => setLoading(false)}
       >
         {/* Lights */}
         <ambientLight intensity={0.5} />
         <directionalLight position={[5, 5, 5]} />
 
         {/* Models and Forest */}
-        <Suspense fallback={<Loader />}>
+        <Suspense fallback={null}>
           {isBg ? (
             <>
               <Environment files='/models/qwantani_4k.hdr' background />
