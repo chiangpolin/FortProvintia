@@ -1,4 +1,4 @@
-import { useRef, Suspense, memo, useState } from 'react';
+import { useState, useEffect, useRef, Suspense, memo } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import {
   Environment,
@@ -151,12 +151,22 @@ export default function ModelsPage() {
     },
   ];
 
-  const [loading, setLoading] = useState(false);
   const [target, setTarget] = useState(cameraViews[0]);
   const [flyIn, setFlyIn] = useState(false);
   const [moving, setMoving] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isFg, setIsFg] = useState(true)
   const [isBg, setIsBg] = useState(true);
+  const [showUI, setShowUI] = useState(false);
+  const { progress } = useProgress();
+
+  // when progress reaches 100, show the buttons
+  useEffect(() => {
+    if (progress === 100) {
+      const timeout = setTimeout(() => setShowUI(true), 300); // small delay for smooth transition
+      return () => clearTimeout(timeout);
+    }
+  }, [progress]);
 
   const handleButtonClick = (view) => {
     setTarget(view);
@@ -169,12 +179,7 @@ export default function ModelsPage() {
   };
 
   return (
-    <div className='relative' style={{ width: '100vw', height: '100vh' }}>
-      {loading && (
-        <div className='absolute inset-0 flex items-center justify-center bg-black/50 text-white z-10'>
-          Loading...
-        </div>
-      )}
+    <div style={{ width: '100vw', height: '100vh' }}>
       <Canvas
         shadows
         camera={{ position: [-60, 8, -80], fov: 50 }}
@@ -188,14 +193,11 @@ export default function ModelsPage() {
         }}
         onPointerDown={handleInteraction}
         onWheel={handleInteraction}
-        onCreated={() => setLoading(false)}
       >
-        {/* Lights */}
-        <ambientLight intensity={0.5} />
-        <directionalLight position={[5, 5, 5]} />
-
-        {/* Models and Forest */}
-        <Suspense fallback={null}>
+        <Suspense fallback={<Loader />}>
+          {/* Lights */}
+          <ambientLight intensity={0.5} />
+          <directionalLight position={[5, 5, 5]} />
           {isBg ? (
             <>
               <Environment files='/models/qwantani_4k.hdr' background />
@@ -206,7 +208,7 @@ export default function ModelsPage() {
                     key={i}
                     path={path}
                     scale={1}
-                    position={[40, -2, -20]}
+                    position={[40, -2, -64]}
                   />
                 ))}
                 {lands.map((path, i) => (
@@ -219,82 +221,93 @@ export default function ModelsPage() {
               <Environment preset='sunset' />
             </>
           )}
-          <group rotation={[0, Math.PI / 2, 0]}>
-            {forts.map((path, i) => (
-              <Model key={i} path={path} scale={1} position={[0, 0, 0]} />
-            ))}
-          </group>
-        </Suspense>
-
-        {/* Camera Control */}
-        <CameraController
-          targetPosition={target.position}
-          flyIn={flyIn}
-          setFlyIn={setFlyIn}
-          moving={moving}
-          setMoving={setMoving}
-        />
-        {/* <CameraIntro /> */}
-      </Canvas>
-
-      {/* Buttons UI */}
-      <div className='absolute bottom-10 w-full flex justify-center gap-4'>
-        <div class='inline-flex rounded-lg overflow-hidden' role='group'>
-          {cameraViews.map((view, idx) => (
-            <button
-              key={idx}
-              onClick={() => handleButtonClick(view)}
-              className={`px-4 py-2 text-sm font-medium transition-colors duration-150 ${
-                target.label === view.label
-                  ? 'bg-gray-700 text-white'
-                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white'
-              }`}
-            >
-              {view.label}
-            </button>
-          ))}
-        </div>
-        <button
-          onClick={() => setIsOpen(true)}
-          className='px-6 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition'
-        >
-          Photo
-        </button>
-        <label class='inline-flex items-center cursor-pointer'>
-          <input
-            type='checkbox'
-            value={isBg}
-            onChange={() => setIsBg(!isBg)}
-            class='sr-only peer'
+          {isFg && (
+            <group rotation={[0, Math.PI / 2, 0]}>
+              {forts.map((path, i) => (
+                <Model key={i} path={path} scale={1} position={[0, 0, 0]} />
+              ))}
+            </group>
+          )}
+          {/* Camera Control */}
+          <CameraController
+            targetPosition={target.position}
+            flyIn={flyIn}
+            setFlyIn={setFlyIn}
+            moving={moving}
+            setMoving={setMoving}
           />
-          <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
-        </label>
-      </div>
-
-      {/* === Modal === */}
-      {isOpen && (
-        <div className='fixed inset-0 flex items-center justify-center bg-black/70 z-50'>
-          <div className='bg-white rounded-3xl overflow-hidden shadow-2xl w-full h-full max-w-xl max-h-[90vh] mx-4 relative'>
-            {/* Image */}
-            <div className='relative h-[600px] w-full flex justify-center'>
-              <Image
-                className='object-cover'
-                src={target.snapshot}
-                fill
-                priority
+        </Suspense>
+      </Canvas>
+      {showUI && (
+        <>
+          {/* Buttons UI */}
+          <div className='absolute bottom-10 w-full flex justify-center gap-4'>
+            <div class='inline-flex rounded-lg overflow-hidden' role='group'>
+              {cameraViews.map((view, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => handleButtonClick(view)}
+                  className={`px-4 py-2 text-sm font-medium transition-colors duration-150 ${
+                    target.label === view.label
+                      ? 'bg-gray-700 text-white'
+                      : 'bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white'
+                  }`}
+                >
+                  {view.label}
+                </button>
+              ))}
+            </div>
+            <button
+              onClick={() => setIsOpen(true)}
+              className='px-6 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition'
+            >
+              Photo
+            </button>
+            <label class='inline-flex items-center cursor-pointer'>
+              <input
+                type='checkbox'
+                checked={isFg}
+                onChange={() => setIsFg(!isFg)}
+                class='sr-only peer'
               />
-            </div>
-            {/* Button */}
-            <div className='p-4 flex justify-center'>
-              <button
-                onClick={() => setIsOpen(false)}
-                className='px-6 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition'
-              >
-                Close
-              </button>
-            </div>
+              <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
+            </label>
+            <label class='inline-flex items-center cursor-pointer'>
+              <input
+                type='checkbox'
+                checked={isBg}
+                onChange={() => setIsBg(!isBg)}
+                class='sr-only peer'
+              />
+              <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
+            </label>
           </div>
-        </div>
+          {/* === Modal === */}
+          {isOpen && (
+            <div className='fixed inset-0 flex items-center justify-center bg-black/70 z-50'>
+              <div className='bg-white rounded-3xl overflow-hidden shadow-2xl w-full h-full max-w-xl max-h-[90vh] mx-4 relative'>
+                {/* Image */}
+                <div className='relative h-[600px] w-full flex justify-center'>
+                  <Image
+                    className='object-cover'
+                    src={target.snapshot}
+                    fill
+                    priority
+                  />
+                </div>
+                {/* Button */}
+                <div className='p-4 flex justify-center'>
+                  <button
+                    onClick={() => setIsOpen(false)}
+                    className='px-6 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition'
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
