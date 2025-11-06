@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Fort Provintia
 
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```
+├── backend/
+│   ├── src/
+│   │   ├── api/          # Connect to Stable Diffusion API
+│   │   ├── pipeline/     # Colab pipelines for image generation
+│   │   └── utils/        # Utility functions for image processing, helpers
+│   └── static/           # Static files used by backend
+│
+├── frontend/
+│   ├── public/           # Public assets
+│   └── src/
+│       ├── app/          # Next.js app components
+│       └── pages/
+│           └── demo.js   # Demo page using Three.js
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Backend
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+The backend is implemented in **Python** and handles the AI image generation using **Stable Diffusion**.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### API
 
-## Learn More
+- Connects to Stable Diffusion API: `https://api.stability.ai/v2beta/stable-image/generate/sd3`
+- Supports **Stable Diffusion XL 1024 v1.0**
+- Handles request/response formatting and error handling
 
-To learn more about Next.js, take a look at the following resources:
+### Pipeline
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Implements Colab-based pipelines for image generation
+- Supports multiple Stable Diffusion models:
+  - `stable-diffusion-v1-5`  
+  - `stabilityai/stable-diffusion-xl-refiner-1.0`
+- Handles preprocessing, generation, and postprocessing of images
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Utils
 
-## Deploy on Vercel
+- Helper functions for:
+  - Image resizing, conversion, and normalization
+  - Logging and error handling
+  - File storage and retrieval
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Frontend
+
+- Built with **Next.js**
+- Uses **Three.js** for interactive 3D visualization
+- Demo page: `pages/demo.js` demonstrates rendering 3D content and integrating with backend-generated images
