@@ -1,9 +1,10 @@
-import base64
 import os
 import requests
+import base64
 from dotenv import load_dotenv
 
 load_dotenv()
+
 
 engine_id = "stable-diffusion-xl-1024-v1-0"
 api_host = os.getenv("API_HOST", "https://api.stability.ai")
@@ -14,11 +15,7 @@ output_path = os.getenv("OUTPUT_IMAGE_PATH")
 if api_key is None:
     raise Exception("Missing Stability API key.")
 
-prompt = (
-    "17th century"
-    "Dutch colonial fort"
-    "Preserve original structure and proportions"
-)
+prompt = "16th-century, Dutch colony, historical scene, realistic, coastal atmosphere"
 
 response = requests.post(
     f"{api_host}/v1/generation/{engine_id}/image-to-image",
@@ -36,6 +33,7 @@ response = requests.post(
         "cfg_scale": 8,
         "samples": 1,
         "steps": 30,
+        "seed": 205,
     }
 )
 

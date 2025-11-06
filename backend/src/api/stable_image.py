@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 api_key = os.getenv("API_KEY")
 input_path = os.getenv("INPUT_IMAGE_PATH")
 output_path = os.getenv("OUTPUT_IMAGE_PATH")
@@ -11,13 +12,7 @@ output_path = os.getenv("OUTPUT_IMAGE_PATH")
 if not api_key:
     raise ValueError("API_KEY not found")
 
-prompt = (
-    "17th century"
-    "Dutch colonial fort"
-    "Warm sunlight"
-    "Coastal atmosphere"
-    "Preserve original structure and proportions"
-)
+prompt = "16th-century, Dutch colony, historical scene, realistic, coastal atmosphere"
 
 response = requests.post(
     "https://api.stability.ai/v2beta/stable-image/generate/sd3",
@@ -31,10 +26,10 @@ response = requests.post(
     data={
         "prompt": prompt,
         "mode": 'image-to-image',
-        "strength": 0.55,
+        "strength": 0.65,
         "output_format": "png",
         "model": 'sd3.5-flash',
-        "seed": 100,
+        "seed": 120,
         "style_preset": 'photographic',
     },
     timeout=600,
