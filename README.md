@@ -48,21 +48,20 @@ The backend is implemented in **Python** and handles the AI image generation usi
 ### Pipeline
 
 - Implements Colab-based pipelines for image generation
+  - model: `stable-diffusion-v1-5`
   - `/backend/src/pipeline/diffusion.ipynb`
   <p align="center">
     <img src="/backend/static/scenes/scene_1/0.png" alt="Original" width="300"/>
     <img src="/backend/static/scenes/scene_1/final_composite.png" alt="Generated" width="300"/>
   </p>
 
+  - model: `stabilityai/stable-diffusion-xl-refiner-1.0`
   - `/backend/src/pipeline/refiner.ipynb`
   <p align="center">
     <img src="/backend/static/scenes/scene_1/0.png" alt="Original" width="300"/>
     <img src="/backend/static/scenes/scene_1/refined.png" alt="Generated" width="300"/>
   </p>
 
-- Supports multiple Stable Diffusion models:
-  - `stable-diffusion-v1-5`  
-  - `stabilityai/stable-diffusion-xl-refiner-1.0`
 - Handles preprocessing, generation, and postprocessing of images
 
 ### Utils
