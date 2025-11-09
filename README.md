@@ -32,13 +32,15 @@ The backend is implemented in **Python** and handles the AI image generation usi
 
 - Connects to Stable Diffusion API: 
   - `https://api.stability.ai/v2beta/stable-image/generate/sd3`
-    | Original | AI-Generated |
-    |----------|--------------|
-    | ![Original](/backend/static/scenes/scene_1/0.png) | ![Generated](/backend/static/images/stable_image.png) |
+  <p align="center">
+    <img src="/backend/static/scenes/scene_1/0.png" alt="Original" width="300"/>
+    <img src="/backend/static/images/stable_image.png" alt="Generated" width="300"/>
+  </p>
   - `https://api.stability.ai/v1/generation/stable-diffusion-xl-1024-v1-0/image-to-image`
-    | Original | AI-Generated |
-    |----------|--------------|
-    | ![Original](/backend/static/scenes/scene_1/0.png) | ![Generated](/backend/static/images/image_to_image.png) |
+  <p align="center">
+    <img src="/backend/static/scenes/scene_1/0.png" alt="Original" width="300"/>
+    <img src="/backend/static/images/image_to_image.png" alt="Generated" width="300"/>
+  </p>
 - Handles request/response formatting and error handling
 
 ### Pipeline
