@@ -36,18 +36,30 @@ The backend is implemented in **Python** and handles the AI image generation usi
     <img src="/backend/static/scenes/scene_1/0.png" alt="Original" width="300"/>
     <img src="/backend/static/images/stable_image.png" alt="Generated" width="300"/>
   </p>
+
   - `https://api.stability.ai/v1/generation/stable-diffusion-xl-1024-v1-0/image-to-image`
   <p align="center">
     <img src="/backend/static/scenes/scene_1/0.png" alt="Original" width="300"/>
     <img src="/backend/static/images/image_to_image.png" alt="Generated" width="300"/>
   </p>
+
 - Handles request/response formatting and error handling
 
 ### Pipeline
 
 - Implements Colab-based pipelines for image generation
   - `/backend/src/pipeline/diffusion.ipynb`
+  <p align="center">
+    <img src="/backend/static/scenes/scene_1/0.png" alt="Original" width="300"/>
+    <img src="/backend/static/scenes/scene_1/final_composite.png" alt="Generated" width="300"/>
+  </p>
+
   - `/backend/src/pipeline/refiner.ipynb`
+  <p align="center">
+    <img src="/backend/static/scenes/scene_1/0.png" alt="Original" width="300"/>
+    <img src="/backend/static/scenes/scene_1/refined.png" alt="Generated" width="300"/>
+  </p>
+
 - Supports multiple Stable Diffusion models:
   - `stable-diffusion-v1-5`  
   - `stabilityai/stable-diffusion-xl-refiner-1.0`
@@ -75,7 +87,8 @@ The frontend is built with **Next.js** and integrates **Three.js** for interacti
 ![plot](/frontend/public/static/website_4.png)
   - Captures snapshots of the rendered scene
 ![plot](/frontend/public/static/website_3.png)
-- Integrates with backend-generated images for enhanced visualization.
+- Integrates with third-party generated images for enhanced visualization.
+![plot](/backend/static/images/image-44bf5738-13dc-4653-9806-6ea7ce9a347a.jpg)
 
 ---
 
