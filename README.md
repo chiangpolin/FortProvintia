@@ -1,4 +1,9 @@
 # Fort Provintia
+Visit the [Website](https://fort.chiangpolin.com/)
+
+This project is an interactive 3D visualization project that integrates AI-generated images with web-based 3D rendering. 
+
+The project consists of a backend for AI image generation using **Stable Diffusion** and a frontend built with **Next.js** and **Three.js** for interactive visualization.
 
 ```
 ├── backend/
@@ -22,13 +27,16 @@ The backend is implemented in **Python** and handles the AI image generation usi
 
 ### API
 
-- Connects to Stable Diffusion API: `https://api.stability.ai/v2beta/stable-image/generate/sd3`
-- Supports **Stable Diffusion XL 1024 v1.0**
+- Connects to Stable Diffusion API: 
+  - `https://api.stability.ai/v2beta/stable-image/generate/sd3`
+  - `https://api.stability.ai/v1/generation/stable-diffusion-xl-1024-v1-0/image-to-image`
 - Handles request/response formatting and error handling
 
 ### Pipeline
 
 - Implements Colab-based pipelines for image generation
+  - `/backend/src/pipeline/diffusion.ipynb`
+  - `/backend/src/pipeline/refiner.ipynb`
 - Supports multiple Stable Diffusion models:
   - `stable-diffusion-v1-5`  
   - `stabilityai/stable-diffusion-xl-refiner-1.0`
@@ -45,6 +53,26 @@ The backend is implemented in **Python** and handles the AI image generation usi
 
 ## Frontend
 
-- Built with **Next.js**
-- Uses **Three.js** for interactive 3D visualization
-- Demo page: `pages/demo.js` demonstrates rendering 3D content and integrating with backend-generated images
+The frontend is built with **Next.js** and integrates **Three.js** for interactive 3D visualization.
+
+- **Demo page:** `pages/demo.js`  
+  - Renders interactive 3D content 
+  ![plot](/frontend/public/images/website_1.png) 
+  - Allows selecting different camera views 
+  ![plot](/frontend/public/images/website_2.png) 
+  - Displays 3D models without background  
+  ![plot](/frontend/public/images/website_4.png)
+  - Captures snapshots of the rendered scene  
+  ![plot](/frontend/public/images/website_3.png)
+- Integrates with backend-generated images for enhanced visualization.
+
+---
+
+## Overview Workflow
+
+1. **User interaction on frontend** triggers a request for an AI-generated image.  
+2. **Backend pipeline** processes the input, generates or refines the image using Stable Diffusion.  
+3. **Processed image** is returned to the frontend.  
+4. **Frontend** renders the image alongside interactive 3D models using Three.js.  
+5. Users can manipulate camera angles, view models without backgrounds, and capture snapshots.  
+
