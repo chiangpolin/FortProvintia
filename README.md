@@ -57,13 +57,21 @@ The frontend is built with **Next.js** and integrates **Three.js** for interacti
 
 - **Demo page:** `pages/demo.js`  
   - Renders interactive 3D content 
-  ![plot](/frontend/public/images/website_1.png) 
+
+![plot](/frontend/public/images/website_1.png) 
+
   - Allows selecting different camera views 
-  ![plot](/frontend/public/images/website_2.png) 
-  - Displays 3D models without background  
-  ![plot](/frontend/public/images/website_4.png)
-  - Captures snapshots of the rendered scene  
-  ![plot](/frontend/public/images/website_3.png)
+
+![plot](/frontend/public/images/website_2.png) 
+
+  - Displays 3D models without background
+  
+![plot](/frontend/public/images/website_4.png)
+
+  - Captures snapshots of the rendered scene
+
+![plot](/frontend/public/images/website_3.png)
+
 - Integrates with backend-generated images for enhanced visualization.
 
 ---
