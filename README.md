@@ -1,9 +1,12 @@
 # Fort Provintia
+
 Visit the [Website](https://fort.chiangpolin.com/)
 
 This project is an interactive 3D visualization project that integrates AI-generated images with web-based 3D rendering. 
 
-The project consists of a backend for AI image generation using **Stable Diffusion** and a frontend built with **Next.js** and **Three.js** for interactive visualization.
+The project consists of 
+A backend for AI image generation using **Stable Diffusion** 
+A frontend built with **Next.js** and **Three.js** for interactive visualization.
 
 ```
 ├── backend/
@@ -29,7 +32,13 @@ The backend is implemented in **Python** and handles the AI image generation usi
 
 - Connects to Stable Diffusion API: 
   - `https://api.stability.ai/v2beta/stable-image/generate/sd3`
+    | Original | AI-Generated |
+    |----------|--------------|
+    | ![Original](/backend/static/scenes/scene_1/0.png) | ![Generated](/backend/static/images/stable_image.png) |
   - `https://api.stability.ai/v1/generation/stable-diffusion-xl-1024-v1-0/image-to-image`
+    | Original | AI-Generated |
+    |----------|--------------|
+    | ![Original](/backend/static/scenes/scene_1/0.png) | ![Generated](/backend/static/images/image_to_image.png) |
 - Handles request/response formatting and error handling
 
 ### Pipeline
